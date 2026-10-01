@@ -185,6 +185,8 @@ output.error { border-left-color: var(--error); color: var(--error); }
 
 .away { margin: 18px 0 12px; color: var(--muted); }
 
+.note { margin: 14px 0 0; color: var(--error); font-weight: 600; }
+
 footer {
   display: flex;
   gap: 14px;

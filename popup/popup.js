@@ -38,6 +38,7 @@ if (!match) {
     source = { kind: "live" };
     savePrefs();
     renderSources();
+    checkInflight();
   });
 
   async function renderSources() {
@@ -92,9 +93,29 @@ if (!match) {
 
   $("fill").addEventListener("click", () => startJob("fill", { appId, platform, fields, source }));
 
+  // Whether the platform has a version in preparation: null while unknown.
+  let inflight = null;
+  async function checkInflight() {
+    const asked = platform;
+    inflight = null;
+    let answer = null;
+    try {
+      const response = await chrome.tabs.sendMessage(tab.id, { cmd: "hasInflight", args: { platform } });
+      answer = response?.ok ? response.result : null;
+    } catch {
+      // Page script not injected (tab opened before install): don't block.
+    }
+    if (asked !== platform) return;
+    inflight = answer;
+    const name = $("platform").selectedOptions[0].textContent;
+    $("noVersion").textContent = `No ${name} version in preparation.`;
+    $("noVersion").hidden = inflight !== false;
+    updateButtons();
+  }
+
   let running = false;
   function updateButtons() {
-    $("fill").disabled = running || !fields.length;
+    $("fill").disabled = running || !fields.length || inflight === false;
   }
 
   function showJob(job) {
@@ -116,6 +137,7 @@ if (!match) {
   const { job } = await chrome.storage.session.get("job");
   showJob(job?.state === "running" && Date.now() - job.at > 60_000 ? null : job);
   renderSources();
+  checkInflight();
 }
 
 function sameSource(a, b) {

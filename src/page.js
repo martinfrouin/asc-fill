@@ -174,7 +174,15 @@
     return { version: versionString(), texts: snapshot, filled, missing };
   }
 
-  const commands = { ready, capture, fill };
+  // Does the sidebar list a version in preparation for this platform?
+  // null when the sidebar is not there to tell.
+  async function hasInflight({ platform }) {
+    const sidebar = await until(() => document.querySelector('a[href*="/distribution/"][href*="/version/"]'), 4000);
+    if (!sidebar) return null;
+    return !!document.querySelector(`a[href*="/distribution/${platform}/version/inflight"]`);
+  }
+
+  const commands = { ready, capture, fill, hasInflight };
 
   chrome.runtime.onMessage.addListener((message, _sender, reply) => {
     const command = commands[message?.cmd];
