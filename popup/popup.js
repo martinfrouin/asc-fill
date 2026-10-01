@@ -14,7 +14,10 @@ if (!match) {
   $("away").hidden = false;
 } else {
   const [, appId, urlPlatform, page] = match;
-  const appName = tab.title?.split(/\s[-–|]\s/)[0]?.trim();
+  // The tab title is "<App> - App Store Connect" on some pages, just
+  // "App Store Connect" on others.
+  const titlePart = tab.title?.split(/\s[-–|]\s/)[0]?.trim();
+  const appName = titlePart === "App Store Connect" ? null : titlePart;
   const prefs = (await chrome.storage.local.get("prefs")).prefs ?? {};
   let platform = urlPlatform ?? prefs.platform ?? "ios";
   let fields = prefs.fields ?? [...FIELDS];

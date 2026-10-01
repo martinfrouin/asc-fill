@@ -32,7 +32,8 @@
     );
     if (!match) return null;
     const [, appId, platform = null, page = null] = match;
-    const appName = clean(document.title.split(/\s[-–|]\s/)[0]);
+    const titlePart = clean(document.title.split(/\s[-–|]\s/)[0]);
+    const appName = titlePart === "App Store Connect" ? "" : titlePart;
     return { appId, platform, page, appName };
   }
 
