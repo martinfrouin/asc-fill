@@ -90,13 +90,16 @@ async function runFill({ tabId, appId, platform, fields, source }) {
 
 // Toolbar icon: orange on App Store Connect, gray elsewhere.
 const ICONS = {
-  on: { 16: "icons/16.png", 32: "icons/32.png" },
-  off: { 16: "icons/off/16.png", 32: "icons/off/32.png" },
+  on: { 16: "/icons/16.png", 32: "/icons/32.png" },
+  off: { 16: "/icons/off/16.png", 32: "/icons/off/32.png" },
 };
 
 function paintIcon(tabId, url) {
   const on = url?.startsWith(`${ASC}/`);
-  chrome.action.setIcon({ tabId, path: on ? ICONS.on : ICONS.off }).catch(() => {});
+  chrome.action.setIcon({ tabId, path: on ? ICONS.on : ICONS.off }).catch((error) => {
+    // A tab closed in the meantime is fine; anything else is a bug.
+    if (!/No tab with id/.test(error.message)) console.error("[ASC Fill] setIcon:", error);
+  });
 }
 
 chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
