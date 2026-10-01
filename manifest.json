@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ASC Fill",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Reuse What's New and Promotional Text from previous versions in App Store Connect.",
   "icons": {
     "16": "icons/16.png",
