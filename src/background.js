@@ -88,6 +88,24 @@ async function runFill({ tabId, appId, platform, fields, source }) {
   await setStatus("done", `Filled ${result.filled.length} languages. Review, then click Save.${skipped}`);
 }
 
+// Toolbar icon: orange on App Store Connect, gray elsewhere.
+const ICONS = {
+  on: { 16: "icons/16.png", 32: "icons/32.png" },
+  off: { 16: "icons/off/16.png", 32: "icons/off/32.png" },
+};
+
+function paintIcon(tabId, url) {
+  const on = url?.startsWith(`${ASC}/`);
+  chrome.action.setIcon({ tabId, path: on ? ICONS.on : ICONS.off }).catch(() => {});
+}
+
+chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+  if (info.url || info.status) paintIcon(tabId, tab.url);
+});
+
+// Tabs already open when the extension starts.
+chrome.tabs.query({}).then((tabs) => tabs.forEach((tab) => paintIcon(tab.id, tab.url)));
+
 const jobs = { fill: runFill };
 
 chrome.runtime.onMessage.addListener((message, sender) => {
