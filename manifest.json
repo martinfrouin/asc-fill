@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "ASC Fill",
+  "version": "0.1.0",
+  "description": "Reuse What's New and Promotional Text from previous versions in App Store Connect.",
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://appstoreconnect.apple.com/*"],
+      "js": ["src/page.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["https://appstoreconnect.apple.com/*"]
+}

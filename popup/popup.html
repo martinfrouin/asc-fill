@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ASC Fill</title>
+  <link rel="stylesheet" href="popup.css">
+  <script type="module" src="popup.js"></script>
+</head>
+<body>
+  <header>
+    <img src="../icons/logo.svg" alt="" width="22" height="22">
+    <h1>ASC Fill</h1>
+    <span id="app" class="app" hidden></span>
+  </header>
+
+  <main id="away" hidden>
+    <p class="away">Open an app in App Store Connect.</p>
+    <a class="button primary" href="https://appstoreconnect.apple.com/apps" target="_blank">App Store Connect</a>
+  </main>
+
+  <main id="tool" hidden>
+    <section>
+      <h2>Fields</h2>
+      <div class="chips" id="fields">
+        <label><input type="checkbox" value="whatsNew"><span>What's New</span></label>
+        <label><input type="checkbox" value="promotionalText"><span>Promotional Text</span></label>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <h2>Copy from</h2>
+        <select id="platform" aria-label="Platform">
+          <option value="ios">iOS</option>
+          <option value="macos">macOS</option>
+          <option value="tvos">tvOS</option>
+          <option value="visionos">visionOS</option>
+        </select>
+      </div>
+      <ul class="sources" id="sources"></ul>
+    </section>
+
+    <div class="actions">
+      <button id="fill" class="button primary">Fill version in preparation</button>
+      <button id="capture" class="button" hidden>Save this version to history</button>
+    </div>
+
+    <output id="status" hidden></output>
+  </main>
+
+  <footer id="links"></footer>
+</body>
+</html>
