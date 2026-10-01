@@ -11,12 +11,9 @@
 
 ## Features
 
-- Fill the version in preparation from:
-  - the **live version**,
-  - one of the **last 10 versions** kept in history,
-  - the **primary language**, copied to every language.
+- Fill the version in preparation from the **live version** or one of the **last 10 versions**.
 - Choose What's New, Promotional Text, or both.
-- Every version read or filled is kept in history, per app and platform.
+- History builds itself: every version copied or filled is kept, per app and platform.
 - Nothing is saved for you: review, then click **Save** in App Store Connect.
 
 ## Install

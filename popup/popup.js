@@ -13,7 +13,7 @@ renderLinks();
 if (!match) {
   $("away").hidden = false;
 } else {
-  const [, appId, urlPlatform, page] = match;
+  const [, appId, urlPlatform] = match;
   // The tab title is "<App> - App Store Connect" on some pages, just
   // "App Store Connect" on others.
   const titlePart = tab.title?.split(/\s[-–|]\s/)[0]?.trim();
@@ -27,7 +27,6 @@ if (!match) {
   $("app").hidden = !appName;
   $("app").textContent = appName ?? "";
   $("platform").value = platform;
-  $("capture").hidden = !page;
 
   const savePrefs = () => chrome.storage.local.set({ prefs: { platform, fields } });
 
@@ -53,7 +52,6 @@ if (!match) {
 
     const items = [
       { key: "live", source: { kind: "live" }, title: "Live version", meta: "On the App Store" },
-      { key: "primary", source: { kind: "primary" }, title: "Primary language", meta: "To every language" },
       ...versions.map((v) => ({
         key: v.id,
         source: { kind: "version", id: v.id },
@@ -99,12 +97,10 @@ if (!match) {
   }
 
   $("fill").addEventListener("click", () => startJob("fill", { appId, platform, fields, source }));
-  $("capture").addEventListener("click", () => startJob("capture", {}));
 
   let running = false;
   function updateButtons() {
     $("fill").disabled = running || !fields.length;
-    $("capture").disabled = running;
   }
 
   function showJob(job) {

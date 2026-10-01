@@ -61,10 +61,9 @@ async function remember(ctx, snapshot) {
   });
 }
 
-// source: { kind: "live" } | { kind: "primary" } | { kind: "version", id }
+// source: { kind: "live" } | { kind: "version", id }
 async function runFill({ tabId, appId, platform, fields, source }) {
-  let texts = null;
-
+  let texts;
   if (source.kind === "live") {
     await setStatus("running", "Opening the live version…");
     const ctx = await open(tabId, versionUrl(appId, platform, "deliverable"));
@@ -81,9 +80,7 @@ async function runFill({ tabId, appId, platform, fields, source }) {
   const ctx = await open(tabId, versionUrl(appId, platform, "inflight"));
   if (ctx?.page !== "inflight") throw new Error("No version in preparation. Create one in App Store Connect first.");
 
-  const result = source.kind === "primary"
-    ? await send(tabId, "fillFromPrimary", { fields })
-    : await send(tabId, "fill", { fields, texts });
+  const result = await send(tabId, "fill", { fields, texts });
   await remember(ctx, result);
 
   if (!result.filled.length) throw new Error("Nothing to paste: the source has no text for these languages.");
@@ -91,16 +88,7 @@ async function runFill({ tabId, appId, platform, fields, source }) {
   await setStatus("done", `Filled ${result.filled.length} languages. Review, then click Save.${skipped}`);
 }
 
-async function runCapture({ tabId }) {
-  await setStatus("running", "Reading this version…");
-  const ctx = await send(tabId, "ready");
-  const snapshot = await send(tabId, "capture");
-  const entry = await remember(ctx, snapshot);
-  if (!entry) throw new Error("Version number not found on this page.");
-  await setStatus("done", `Version ${entry.version} saved to history.`);
-}
-
-const jobs = { fill: runFill, capture: runCapture };
+const jobs = { fill: runFill };
 
 chrome.runtime.onMessage.addListener((message, sender) => {
   if (message?.type === "progress" && sender.tab) {

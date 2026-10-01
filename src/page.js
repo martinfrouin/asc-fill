@@ -67,7 +67,7 @@
         const removable = !!item.parentElement?.querySelector('[data-id^="removeLocale_"]');
         const label = clean(item.getAttribute("aria-label"));
         const isLocale = removable || !label || label.startsWith(name);
-        return isLocale ? { item, name, primary: !removable } : null;
+        return isLocale ? { item, name } : null;
       })
       .filter(Boolean);
   }
@@ -77,7 +77,7 @@
     const items = localeItems(menu);
     closeMenu();
     if (!items.length) throw new Error("No localization found on this version.");
-    return items.map(({ name, primary }) => ({ name, primary }));
+    return items.map(({ name }) => ({ name }));
   }
 
   async function switchTo(name) {
@@ -174,20 +174,7 @@
     return { version: versionString(), texts: snapshot, filled, missing };
   }
 
-  // Copy the primary language's texts into every other language.
-  async function fillFromPrimary({ fields }) {
-    const langs = await languages();
-    const primary = langs.find((l) => l.primary) ?? langs[0];
-    await switchTo(primary.name);
-    const texts = {};
-    for (const field of fields) {
-      const text = readField(field) ?? "";
-      texts[field] = Object.fromEntries(langs.map((l) => [l.name, text]));
-    }
-    return fill({ fields, texts });
-  }
-
-  const commands = { context: async () => context(), ready, capture, fill, fillFromPrimary };
+  const commands = { ready, capture, fill };
 
   chrome.runtime.onMessage.addListener((message, _sender, reply) => {
     const command = commands[message?.cmd];

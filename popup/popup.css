@@ -117,7 +117,7 @@ select {
 }
 .sources li { display: flex; align-items: center; border-top: 1px solid var(--line); }
 .sources li:first-child { border-top: none; }
-.sources li:nth-child(3) { border-top: 1px dashed var(--line); }
+.sources li:nth-child(2) { border-top: 1px dashed var(--line); }
 .sources label {
   flex: 1;
   display: grid;
