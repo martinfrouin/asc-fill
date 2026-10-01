@@ -5,7 +5,7 @@
 <p align="center">Reuse <b>What's New</b> and <b>Promotional Text</b> from previous versions in App Store Connect, for every language at once.</p>
 
 <p align="center">
-  <a href="#install">Chrome Web Store</a> ·
+  <a href="https://chromewebstore.google.com/detail/asc-fill/mabnhcpnidiflnnkmincopngcahdkppc">Chrome Web Store</a> ·
   <a href="https://github.com/sponsors/martinfrouin">Buy me a coffee ☕</a>
 </p>
 
@@ -17,7 +17,7 @@
 
 ## Install
 
-Chrome Web Store: coming soon.
+[Chrome Web Store](https://chromewebstore.google.com/detail/asc-fill/mabnhcpnidiflnnkmincopngcahdkppc)
 
 From source: `chrome://extensions` → Developer mode → **Load unpacked** → this folder.
 
