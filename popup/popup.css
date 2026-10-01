@@ -48,14 +48,6 @@ header {
 
 h1 { margin: 0; font-size: 15px; font-weight: 750; letter-spacing: -0.01em; }
 
-.app {
-  margin-left: auto;
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--muted);
-}
 
 main { padding: 4px 16px 16px; }
 
