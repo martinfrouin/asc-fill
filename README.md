@@ -14,7 +14,6 @@
 - Fill the version in preparation from the **live version** or one of the **last 10 versions**.
 - Choose What's New, Promotional Text, or both.
 - History builds itself: every version copied or filled is kept, per app and platform.
-- Nothing is saved for you: review, then click **Save** in App Store Connect.
 
 ## Install
 

@@ -14,8 +14,6 @@ ASC Fill fills the version in preparation in App Store Connect with the texts of
 
 Choose What's New, Promotional Text, or both. History builds itself: every version you copy or fill is kept.
 
-ASC Fill never clicks Save: review the texts, then save in App Store Connect.
-
 Everything stays in your browser. No account, no server, no tracking.
 
 Open source: https://github.com/martinfrouin/asc-fill
