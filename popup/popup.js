@@ -1,4 +1,4 @@
-import { FIELDS, listVersions, deleteVersion, languageCount } from "../src/history.js";
+import { FIELDS, FIELD_LABELS, listVersions, deleteVersion, languageCount } from "../src/history.js";
 import { LINKS } from "../src/links.js";
 
 const $ = (id) => document.getElementById(id);
@@ -18,6 +18,8 @@ if (!match) {
   let platform = urlPlatform ?? prefs.platform ?? "ios";
   let fields = prefs.fields ?? [...FIELDS];
   let source = { kind: "live" };
+  let versions = [];
+  let previewLang = null;
 
   $("tool").hidden = false;
   $("platform").value = platform;
@@ -42,7 +44,7 @@ if (!match) {
   });
 
   async function renderSources() {
-    const versions = await listVersions(appId, platform);
+    versions = await listVersions(appId, platform);
     if (source.kind === "version" && !versions.some((v) => v.id === source.id)) source = { kind: "live" };
 
     const items = [
@@ -62,7 +64,10 @@ if (!match) {
         const label = document.createElement("label");
         const radio = Object.assign(document.createElement("input"), { type: "radio", name: "source" });
         radio.checked = sameSource(item.source, source);
-        radio.addEventListener("change", () => (source = item.source));
+        radio.addEventListener("change", () => {
+          source = item.source;
+          renderPreview();
+        });
         const title = Object.assign(document.createElement("span"), { className: "title", textContent: item.title });
         const meta = Object.assign(document.createElement("span"), { className: "meta", textContent: item.meta });
         if (item.source.kind === "version") title.classList.add("mono");
@@ -83,8 +88,39 @@ if (!match) {
         return li;
       }),
     );
+    renderPreview();
     updateButtons();
   }
+
+  // Texts of the selected history version, one language at a time.
+  function renderPreview() {
+    const entry = source.kind === "version" && versions.find((v) => v.id === source.id);
+    $("preview").hidden = !entry || !fields.length;
+    if ($("preview").hidden) return;
+
+    const langs = [...new Set(fields.flatMap((f) => Object.keys(entry.texts[f] ?? {})))];
+    if (!langs.includes(previewLang)) previewLang = langs[0] ?? null;
+    $("previewLang").replaceChildren(
+      ...langs.map((lang) => new Option(lang, lang, false, lang === previewLang)),
+    );
+
+    $("previewTexts").replaceChildren(
+      ...fields.map((field) => {
+        const block = Object.assign(document.createElement("div"), { className: "text" });
+        const label = Object.assign(document.createElement("span"), { className: "meta", textContent: FIELD_LABELS[field] });
+        const text = entry.texts[field]?.[previewLang]?.trim();
+        const body = Object.assign(document.createElement("p"), { textContent: text || "—" });
+        if (!text) body.className = "empty";
+        block.append(label, body);
+        return block;
+      }),
+    );
+  }
+
+  $("previewLang").addEventListener("change", () => {
+    previewLang = $("previewLang").value;
+    renderPreview();
+  });
 
   function startJob(job, args) {
     chrome.storage.session.set({ job: { state: "running", text: "Starting…", at: Date.now() } });
