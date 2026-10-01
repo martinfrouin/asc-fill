@@ -23,7 +23,7 @@ From source: `chrome://extensions` → Developer mode → **Load unpacked** → 
 
 ## Privacy
 
-Everything stays in your browser. No server, no tracking.
+Everything stays in your browser. No server, no tracking. [Privacy policy](PRIVACY.md).
 
 ## Support
 
